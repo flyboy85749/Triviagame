@@ -1,0 +1,15 @@
+body {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 1em;
+    text-align: center;
+    margin: 0 auto;
+    /* background-image: url("../images/balloon.jpg");
+    background-repeat: no-repeat;
+    background-position: center; */
+    
+}
+
+.jumbotron, .card {
+    padding-top: 0px;
+    background: none;
+}
