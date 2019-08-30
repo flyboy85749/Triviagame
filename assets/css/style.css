@@ -13,3 +13,13 @@ body {
     padding-top: 0px;
     background: none;
 }
+
+.answer {
+    display: block;
+    margin: 10px;
+    
+}
+
+.card-body {
+    margin: auto;
+}

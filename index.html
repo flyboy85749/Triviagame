@@ -16,39 +16,37 @@
 </head>
 
 <body>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript">
-    var queryURL = "https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple";
-         // Performing GET requests to the OMDB API and logging the responses to the console
-    $.ajax({
-        url: queryURL,
-      method: "GET"
-    }).then(function(response) {
-        console.log(response);
 
-        // assign a variable question to redisplay questions with
-        var question = $(".question-text").text(response.results[0].question);
 
-        // do the same thing with answers
-        var correctAnswers =  $(".answer").text(response.results[0].correct_answer);
-        var wrongAnswers =  $(".incorrect").text(response.results[0].incorrect_answers);
 
-     
-    });
-    </script>
+
+
     <div class="container">
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <div class="row">
-                    <h1 class="display-3">Super Duper Trivia Game!</h1>
-                    <p class="lead">Ready to Play?</p>
-                    <hr class="my-2">
-                    <p class="rules">Rules</p>
-                    <p class="rules-text">The rules are pretty simple. We'll show you
-                        a trivia question and some multiple choice answers. You will have 25 seconds
-                        to answer each question. If you answer correctly before the timer expires,
-                        you will score 1 point. If not, you will lose a point.
-                    </p>
+                    <!---------------------------------- begin row 1 ------------------------------->
+                    <div class="col-9">
+                        <h1 class="display-3">Super Duper Trivia Game!</h1>
+                    </div>
+                    <div class="col-3">
+
+                        <h3 class="time-remaining">Countdown Clock here</h3>
+                        <p class="rules-text">Rules</p>
+
+
+                    </div>
+                </div>
+                <!-------------------- end row 1 ------------------------>
+                <div class="row">
+                    <div class="col">
+                        <h2 class="category">Category: Science/Computers</h2>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <!------------- begin row 2 ---------------->
+
 
                     <div class="col">
                         <div class="card">
@@ -57,26 +55,39 @@
                                 <p id="time-left"></p>
                                 <h4 class="card-title question">Question:</h4>
                                 <p class="card-text question-text"></p>
-                                <h4 class="answers">Answers:</h4>
-                                <p class="answer"></p>
+
                                 <p class="incorrect"></p>
                             </div>
                         </div>
+
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
+                            <div class="card-body">
+                                <p id="time-left"></p>
+                                <h4 class="card-title question">Answers:</h4>
+                                <p class="card-text answer-text"></p>
+
+                                <p class="incorrect"></p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+                <!---------------------------------- end row 2 ------------------------------->
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Start Game</a>
+                    <p>Ready to Play?</p>
+                    <a class="btn btn-primary btn-lg start" href="Jumbo action link" role="button">Start Game</a>
                 </p>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
@@ -84,7 +95,123 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
-    <script src="assets/javascript/app.js"></script>
+    <script type="text/javascript">
+        var correct = 0;
+        var wrong = 0;
+
+        var twentyFive = setTimeout(function () {
+            nextQuestion();
+        }, 25000);
+
+        var queryURL = "https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple";
+
+        function alertButtonPush() {
+            var buttonPush = $(this).attr("data-name");
+
+            alert(buttonPush);
+        }
+
+        function renderButtons(answers) {
+
+            //     // YOUR CODE GOES HERE
+
+            // empty div
+            $(".answer-text").empty();
+
+            for (i = 0; i < answers.length; i++) {
+
+
+
+                //         // store for use with all buttons
+                var button = $("<button>");
+
+                //         // add a class that we can target
+                button.addClass("answer");
+
+                //         // add an attribute
+                button.attr("data-name", answers[i]);
+
+                //         // add the text for the buttons
+                button.text(answers[i]);
+
+                //         // now, display the buttons
+                $(".answer-text").append(button);
+            }
+
+        }
+
+        $(".start").click(startGame);
+
+        function startGame(event) {
+            // set starting conditions
+            event.preventDefault();
+
+            twentyFive = setTimeout(function () {
+                nextQuestion();
+            }, 25000);
+
+            correct = 0;
+            wrong = 0;
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response.results);
+
+                // assign variable to hold category for questions 
+                var category = [response.results[1].category];
+
+                // display on page
+                $(".category").html("The category is: " + category);
+
+
+                // assign a variable question to redisplay questions with
+                var question = $(".question-text").html(response.results[1].question);
+
+                // do the same thing with answers
+                // create an array with wrong answers, then add correct answer
+                var answers = response.results[1].incorrect_answers; // incorrect answers
+
+                var answer = response.results[1].correct_answer; // correct answer
+
+                answers.push(answer);
+                console.log(answers);
+                // var test = answer.join("-");
+                // console.log(test);
+                //  $(".answer-text").html(answer.join(" "));
+
+                renderButtons(answers);
+            });
+
+            $(document).on("click", ".answer", alertButtonPush);
+
+            function nextQuestion() {
+                if (button) {
+                    alert("That is the correct answer!");
+                    correct++;
+                }
+                else {
+                    alert("That answer is incorrect");
+                    wrong++;
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+            // note to self: put the answers automatically in input fields, so they don't know the correct answer is the
+            // first one. Randomly pull them in
+
+            // format the api info before displaying it
+    </script>
+    <!-- <script type="text/javascript" src="assets/javascript/app.js"></script> -->
 </body>
 
 </html>
