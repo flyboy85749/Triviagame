@@ -17,137 +17,126 @@
 
 https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple
 
-/////////////////////////////////////////////////////////////////
-//////// *************** VARIABLES ******************///////////
-////////////////////////////////////////////////////////////////
+
 // put everything within your document ready function
 $(document).ready(function () {
-    // add code here
-    // set timer value;
-    // var twentyFive = setTimeout(function () {
-    //     nextQuestion();
-    // }, 25000);
-
-
-    // assign questions to a variable, as well as answers
-    var questions = "";
-    var answers = "";
-
-    // keep track of correct and incorrect answers
+                            /////////////////////////////////////////////////////////////////
+                            //////// *************** VARIABLES ******************///////////
+                            ////////////////////////////////////////////////////////////////
     var correct = 0;
     var wrong = 0;
-    
+    var queryURL = "https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple";
 
 
+                            /////////////////////////////////////////////////////////////////
+                            //////// *************** FUNCTIONS ******************///////////
+                            ////////////////////////////////////////////////////////////////
 
+    function alertButtonPush() {
+        var buttonPush = $(this).attr("data-name");
 
-    /////////////////////////////////////////////////////////////////
-    //////// *************** FUNCTIONS ******************///////////
-    ////////////////////////////////////////////////////////////////
-    function startGame () {
-        // set starting conditions
-        
-            
+        nextQuestion();
     }
 
-    function nextQuestion () {
-        
-    }
+    function renderButtons(answers) {
 
-    function correct () {
-        if (buttonClick === responses.result.correct_answer) {
-            alert("That is the correct answer!");
-            correct++;
+        //     // YOUR CODE GOES HERE
+
+        // empty div
+        $(".answer-text").empty();
+
+        for (i = 0; i < answers.length; i++) {
+
+
+
+            //         // store for use with all buttons
+            var button = $("<button>");
+
+            //         // add a class that we can target
+            button.addClass("answer");
+
+            //         // add an attribute
+            button.attr("data-name", answers[i]);
+
+            //         // add the text for the buttons
+            button.text(answers[i]);
+
+            //         // now, display the buttons
+            $(".answer-text").append(button);
         }
-    }
-
-    function countAnswers () {
 
     }
 
-    // Button triggers new movie to be added 
-    //   <input id="add-movie" type="submit" value="Add a Movie, Yo!">
-    // </form>
-    
-      // Initial array of movies
-    //   var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+    $(".start").click(startGame);
 
-    //   /* // Function for displaying movie data
-    //   //function renderButtons()  */
+    function startGame(event) {
+        // set starting conditions
+        event.preventDefault();
 
-    //     $("#buttons-view").empty();
-    //     // YOUR CODE GOES HERE
-    //     for (i = 0; i < movies.length; i++) {
+        correct = 0;
+        wrong = 0;
 
-    //       // store for use with all buttons
-    //       var button = $("<button>");
+        startTimer();
 
-    //         // add a class that we can target
-    //         button.addClass("movie");
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response.results);
 
-    //         // add an attribute
-    //         button.attr("name", movies[i]);
+            // assign variable to hold category for questions 
+            var category = [response.results[1].category];
 
-    //         // add the text for the buttons
-    //         button.text(movies[i]);
-
-    //         // now, display the buttons
-    //         $("#buttons-view").append(button);
-    //     }
-
-    //   }
-
-    //   // This function handles events where one button is clicked
-    //   $("#add-movie").on("click", function() {
-
-    //     // YOUR CODE GOES HERE
-    //     event.preventDefault();
-    //     // take the entered value
-    //     var movie = $("#movie-input").val();
-
-    //     // add it to the movies array
-    //     movies.push(movie);
-        
-
-    //     renderButtons();
-
-    //   });
-    //   console.log(movies); // does not show the new movie
-
-    //   // Calling the renderButtons function to display the initial list of movies
-    //   renderButtons();
-
-    
-    
+            // display on page
+            $(".category").html("The category is: " + category);
 
 
+            // assign a variable question to redisplay questions with
+            var question = $(".question-text").html(response.results[1].question);
 
+            // do the same thing with answers
+            // create an array with wrong answers, then add correct answer
+            var answers = response.results[1].incorrect_answers; // incorrect answers
 
+            var answer = response.results[1].correct_answer; // correct answer
 
+            answers.push(answer);
+            console.log(answers);
+            // var test = answer.join("-");
+            // console.log(test);
+            //  $(".answer-text").html(answer.join(" "));
 
+            renderButtons(answers);
+        });
 
+        $(document).on("click", ".answer", alertButtonPush);
 
+        function startTimer() {
+            var timeleft = 25;
+            var answerTimer = setInterval(function () {
+                $(".time-remaining").text(timeleft);
+                timeleft -= 1;
+                if (timeleft <= 0) {
+                    clearInterval(answerTimer);
+                    nextQuestion();
+                }
+            }, 1000);
+        }
 
+        function nextQuestion() {
+            console.log("Next Question");
+        }
 
+    }
 
+                                /////////////////////////////////////////////////////////////////
+                            //////// *************** PROCESSES ******************///////////
+                            ////////////////////////////////////////////////////////////////
 
-
-
-
-
-    /////////////////////////////////////////////////////////////////
-    //////// *************** PROCESSES ******************///////////
-    ////////////////////////////////////////////////////////////////
-
-    $(".rules-text").click(function(){
+    $(".rules-text").click(function () {
         alert("The rules are pretty simple. We'll show you a trivia question and some multiple choice answers. You will have 25 seconds to answer each question. If you answer correctly before the timer expires, you will score 1 point. If not, you will lose a point.");
-      });
+    });
 
-      
-
-
-
-
-
-
+    $(".correct").text("Correct: " + correct);
+    $(".wrong").append("Incorrect: " + wrong);
 });
