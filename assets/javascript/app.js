@@ -17,8 +17,8 @@
 
 //opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple
 
-https: // put everything within your document ready function
-$(document).ready(function() {
+// put everything within your document ready function
+https: $(document).ready(function() {
   /////////////////////////////////////////////////////////////////
   //////// *************** VARIABLES ******************///////////
   ////////////////////////////////////////////////////////////////
@@ -26,30 +26,40 @@ $(document).ready(function() {
   var wrong = 0
   var queryURL =
     'https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple'
-  
 
   /////////////////////////////////////////////////////////////////
   //////// *************** FUNCTIONS ******************///////////
   ////////////////////////////////////////////////////////////////
   function nextQuestion() {
-      
+    // if incorrect answer guessed, alert wrong answer, go to next question, add 1 to wrong
+    
+    // score
+    // if timer reaches 0, go to next question, add 1 to wrong
+    // if correct answer chosen, alert, update correct to +1, go to next question
   }
-  
+
+  function resetGame() {
+    startTimer()
+  }
+
   function alertButtonPush() {
     const buttonPush = $(this).attr('data-name')
-    
-        if (buttonPush === answer) {
-          
-      alert("That's right! The correct answer is " + answer)
-      correct = correct++
-    }
-    else {
-      
-      alert("That is the wrong answer, try again")
-      wrong = wrong++
+
+    if (buttonPush === answer) {
+      correct++
+      $('.correct').text('Correct: ' + correct)
+      // console.log(correct)
+      $('.corAns').text("That's right! The correct answer is " + answer)
+
+      // nextQuestion()
+    } else {
+      $('.wroAns').text('That is the wrong answer, try again')
+      wrong++
+      $('.wrong').text('Incorrect: ' + wrong)
+      // 
+      // nextQuestion()
     }
   }
-  
 
   function renderButtons(answers) {
     //     // YOUR CODE GOES HERE
@@ -107,17 +117,17 @@ $(document).ready(function() {
 
       answer = response.results[1].correct_answer // correct answer
 
+      // puts all answers in one array
       answers.push(answer)
-      console.log(answers)
-      // var test = answer.join("-");
-      // console.log(test);
-      //  $(".answer-text").html(answer.join(" "));
 
+      // attaches answers text to buttons
       renderButtons(answers)
     })
 
+    // event listener for the whole page
     $(document).on('click', '.answer', alertButtonPush)
 
+    // start the 25 second timer
     function startTimer() {
       var timeleft = 25
       var answerTimer = setInterval(function() {
@@ -125,14 +135,14 @@ $(document).ready(function() {
         timeleft -= 1
         if (timeleft <= 0) {
           clearInterval(answerTimer)
-          // nextQuestion();
+          console.log("Time's Up!")
+          wrong++ // adds 1 to the wrong counter, for no 
+          $('.wrong').text('Incorrect: ' + wrong)
+          resetGame()
         }
       }, 1000)
     }
-
-    
   }
-  
 
   /////////////////////////////////////////////////////////////////
   //////// *************** PROCESSES ******************///////////
@@ -143,7 +153,6 @@ $(document).ready(function() {
       "The rules are pretty simple. We'll show you a trivia question and some multiple choice answers. You will have 25 seconds to answer each question. If you answer correctly before the timer expires, you will score 1 point. If not, you will lose a point."
     )
   })
-
   $('.correct').text('Correct: ' + correct)
-  $('.wrong').append('Incorrect: ' + wrong)
+  $('.wrong').text('Incorrect: ' + wrong)
 })
