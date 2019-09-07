@@ -25,100 +25,13 @@ https: $(document).ready(function() {
   var correct = 0
   var wrong = 0
   var score = (correct + wrong)
+  // console.log(score)
   var queryURL =
     'https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple'
 
   /////////////////////////////////////////////////////////////////
   //////// *************** FUNCTIONS ******************///////////
   ////////////////////////////////////////////////////////////////
-  function nextQuestion() {
-
-    
-    
-    $.ajax({
-      url: queryURL,
-      method: 'GET'
-    }).then(function(response) {
-      // console.log(response.results);
-
-      // assign variable to hold category for questions
-      const category = [response.results[0].category]
-
-      // display on page
-      $('.category').html('The category is: ' + category)
-
-      // assign a variable question to redisplay questions with
-      const question = $('.question-text').html(response.results[0].question)
-      
-
-      // do the same thing with answers
-      // create an array with wrong answers, then add correct answer
-      const answers = response.results[0].incorrect_answers // incorrect answers
-
-      answer = response.results[0].correct_answer // correct answer
-
-      // puts all answers in one array
-      answers.push(answer)
-      
-      // display randomly
-      
-      
-          
-      // attaches answers text to buttons and displays them randomly (?)
-      renderButtons(answers)
-      // $(".corAns").empty()
-      // $(".wroAns").empty()
-    })
-
-    
-  }
-
-  function alertButtonPush() {
-    const buttonPush = $(this).attr('data-name')
-
-    if (buttonPush === answer) {
-      correct++
-      score++
-      $('.correct').text('Correct: ' + correct)
-      // console.log(correct)
-      $('.corAns').text("That's right! The correct answer is " + answer)
-      
-      nextQuestion()
-      $('.wroAns').empty()
-    } else {
-      $('.wroAns').text('That is the wrong answer, try again')
-      wrong++
-      score++
-      $('.wrong').text('Incorrect: ' + wrong)
-      
-      nextQuestion()
-      $('.corAns').empty()
-    }
-  }
-
-  function renderButtons(answers) {
-    //     // YOUR CODE GOES HERE
-
-    // empty div
-    $('.answer-text').empty()
-
-    for (i = 0; i < answers.length; i++) {
-      //         // store for use with all buttons
-      var button = $('<button>')
-
-      //         // add a class that we can target
-      button.addClass('answer')
-
-      //         // add an attribute
-      button.attr('data-name', answers[i])
-
-      //         // add the text for the buttons
-      button.text(answers[i])
-
-      //         // now, display the buttons
-      $('.answer-text').append(button)
-    }
-  }
 
   $('.start').click(startGame)
 
@@ -165,9 +78,6 @@ https: $(document).ready(function() {
       renderButtons(answers)
     })
 
-    // event listener for the whole page
-    $(document).on('click', '.answer', alertButtonPush)
-
     // start the 25 second timer
     function startTimer() {
       var timeleft = 25
@@ -177,24 +87,115 @@ https: $(document).ready(function() {
         if (timeleft <= 0) {
           clearInterval(answerTimer)
           nextQuestion()
-          // startTimer()
+          
           // console.log("Time's Up!")
           wrong++ // adds 1 to the wrong counter, for no
           score++ 
           $('.wrong').text('Incorrect: ' + wrong)
-         
+         startTimer()
         }
       }, 1000)
       
     }
 
-    function stopGame() {
-      if (score === 10) {
-        console.log("Stop Game!")
-      }
+    function alertButtonPush() {
+      const buttonPush = $(this).attr('data-name')
+  
+      if (buttonPush === answer) {
+        correct++
+        score++
+        $('.correct').text('Correct: ' + correct)
+        // console.log(correct)
+        $('.corAns').text("That's right! The correct answer is " + answer)
+        
+        nextQuestion()
+        
       
+        $('.wroAns').empty()
+  
+      } else {
+        $('.wroAns').text('That is the wrong answer, try again')
+        wrong++
+        score++
+        $('.wrong').text('Incorrect: ' + wrong)
+        
+        nextQuestion()
+        
+      
+        $('.corAns').empty()
+      }
     }
-    stopGame()
+
+  function nextQuestion() {
+   
+        $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }).then(function(response) {
+      // console.log(response.results);
+
+      // assign variable to hold category for questions
+      const category = [response.results[0].category]
+
+      // display on page
+      $('.category').html('The category is: ' + category)
+
+      // assign a variable question to redisplay questions with
+      const question = $('.question-text').html(response.results[0].question)
+      
+
+      // do the same thing with answers
+      // create an array with wrong answers, then add correct answer
+      const answers = response.results[0].incorrect_answers // incorrect answers
+
+      answer = response.results[0].correct_answer // correct answer
+
+      // puts all answers in one array
+      answers.push(answer)
+      
+      // display randomly
+      
+               
+      // attaches answers text to buttons and displays them randomly (?)
+      renderButtons(answers)
+      
+    })
+
+  }
+
+  
+console.log(score)
+  function renderButtons(answers) {
+    //     // YOUR CODE GOES HERE
+
+    // empty div
+    $('.answer-text').empty()
+
+    for (i = 0; i < answers.length; i++) {
+      //         // store for use with all buttons
+      var button = $('<button>')
+
+      //         // add a class that we can target
+      button.addClass('answer')
+
+      //         // add an attribute
+      button.attr('data-name', answers[i])
+
+      //         // add the text for the buttons
+      button.text(answers[i])
+
+      //         // now, display the buttons
+      $('.answer-text').append(button)
+    }
+  }
+
+ 
+    // event listener for the whole page
+    $(document).on('click', '.answer', alertButtonPush)
+
+    
+
+    console.log(score)
   }
 
   /////////////////////////////////////////////////////////////////
