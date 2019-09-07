@@ -31,15 +31,45 @@ https: $(document).ready(function() {
   //////// *************** FUNCTIONS ******************///////////
   ////////////////////////////////////////////////////////////////
   function nextQuestion() {
-    // if incorrect answer guessed, alert wrong answer, go to next question, add 1 to wrong
-    
-    // score
-    // if timer reaches 0, go to next question, add 1 to wrong
-    // if correct answer chosen, alert, update correct to +1, go to next question
-  }
 
-  function resetGame() {
-    startTimer()
+    
+    
+    $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }).then(function(response) {
+      // console.log(response.results);
+
+      // assign variable to hold category for questions
+      const category = [response.results[4].category]
+
+      // display on page
+      $('.category').html('The category is: ' + category)
+
+      // assign a variable question to redisplay questions with
+      const question = $('.question-text').html(response.results[4].question)
+      
+
+      // do the same thing with answers
+      // create an array with wrong answers, then add correct answer
+      const answers = response.results[4].incorrect_answers // incorrect answers
+
+      answer = response.results[4].correct_answer // correct answer
+
+      // puts all answers in one array
+      answers.push(answer)
+      
+      // display randomly
+      
+      
+          
+      // attaches answers text to buttons and displays them randomly (?)
+      renderButtons(answers)
+      // $(".corAns").empty()
+      // $(".wroAns").empty()
+    })
+
+    
   }
 
   function alertButtonPush() {
@@ -50,14 +80,14 @@ https: $(document).ready(function() {
       $('.correct').text('Correct: ' + correct)
       // console.log(correct)
       $('.corAns').text("That's right! The correct answer is " + answer)
-
-      // nextQuestion()
+      
+      nextQuestion()
     } else {
       $('.wroAns').text('That is the wrong answer, try again')
       wrong++
       $('.wrong').text('Incorrect: ' + wrong)
-      // 
-      // nextQuestion()
+      
+      nextQuestion()
     }
   }
 
@@ -96,6 +126,7 @@ https: $(document).ready(function() {
 
     startTimer()
 
+    // pulling in questions from an open API
     $.ajax({
       url: queryURL,
       method: 'GET'
@@ -103,24 +134,29 @@ https: $(document).ready(function() {
       // console.log(response.results);
 
       // assign variable to hold category for questions
-      const category = [response.results[1].category]
+      const category = [response.results[4].category]
 
       // display on page
       $('.category').html('The category is: ' + category)
 
       // assign a variable question to redisplay questions with
-      const question = $('.question-text').html(response.results[1].question)
+      const question = $('.question-text').html(response.results[4].question)
+      
 
       // do the same thing with answers
       // create an array with wrong answers, then add correct answer
-      const answers = response.results[1].incorrect_answers // incorrect answers
+      const answers = response.results[4].incorrect_answers // incorrect answers
 
-      answer = response.results[1].correct_answer // correct answer
+      answer = response.results[4].correct_answer // correct answer
 
       // puts all answers in one array
       answers.push(answer)
-
-      // attaches answers text to buttons
+      
+      // display randomly
+      
+      console.log(answers)
+          
+      // attaches answers text to buttons and displays them randomly (?)
       renderButtons(answers)
     })
 
@@ -131,17 +167,22 @@ https: $(document).ready(function() {
     function startTimer() {
       var timeleft = 25
       var answerTimer = setInterval(function() {
-        $('.time-remaining').text(timeleft)
+        $('.time-remaining').text("Time remaining: " + timeleft)
         timeleft -= 1
         if (timeleft <= 0) {
           clearInterval(answerTimer)
+          nextQuestion()
+          startTimer()
           console.log("Time's Up!")
           wrong++ // adds 1 to the wrong counter, for no 
           $('.wrong').text('Incorrect: ' + wrong)
-          resetGame()
+         
         }
       }, 1000)
+      
     }
+
+    
   }
 
   /////////////////////////////////////////////////////////////////
