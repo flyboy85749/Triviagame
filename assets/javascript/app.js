@@ -24,6 +24,7 @@ https: $(document).ready(function() {
   ////////////////////////////////////////////////////////////////
   var correct = 0
   var wrong = 0
+  var score = (correct + wrong)
   var queryURL =
     'https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple'
 
@@ -41,20 +42,20 @@ https: $(document).ready(function() {
       // console.log(response.results);
 
       // assign variable to hold category for questions
-      const category = [response.results[4].category]
+      const category = [response.results[0].category]
 
       // display on page
       $('.category').html('The category is: ' + category)
 
       // assign a variable question to redisplay questions with
-      const question = $('.question-text').html(response.results[4].question)
+      const question = $('.question-text').html(response.results[0].question)
       
 
       // do the same thing with answers
       // create an array with wrong answers, then add correct answer
-      const answers = response.results[4].incorrect_answers // incorrect answers
+      const answers = response.results[0].incorrect_answers // incorrect answers
 
-      answer = response.results[4].correct_answer // correct answer
+      answer = response.results[0].correct_answer // correct answer
 
       // puts all answers in one array
       answers.push(answer)
@@ -77,17 +78,21 @@ https: $(document).ready(function() {
 
     if (buttonPush === answer) {
       correct++
+      score++
       $('.correct').text('Correct: ' + correct)
       // console.log(correct)
       $('.corAns').text("That's right! The correct answer is " + answer)
       
       nextQuestion()
+      $('.wroAns').empty()
     } else {
       $('.wroAns').text('That is the wrong answer, try again')
       wrong++
+      score++
       $('.wrong').text('Incorrect: ' + wrong)
       
       nextQuestion()
+      $('.corAns').empty()
     }
   }
 
@@ -134,27 +139,27 @@ https: $(document).ready(function() {
       // console.log(response.results);
 
       // assign variable to hold category for questions
-      const category = [response.results[4].category]
+      const category = [response.results[0].category]
 
       // display on page
       $('.category').html('The category is: ' + category)
 
       // assign a variable question to redisplay questions with
-      const question = $('.question-text').html(response.results[4].question)
-      
+      const question = $('.question-text').html(response.results[0].question)
+      // console.log(response.results[0].question)
 
       // do the same thing with answers
       // create an array with wrong answers, then add correct answer
-      const answers = response.results[4].incorrect_answers // incorrect answers
+      const answers = response.results[0].incorrect_answers // incorrect answers
 
-      answer = response.results[4].correct_answer // correct answer
+      answer = response.results[0].correct_answer // correct answer
 
       // puts all answers in one array
       answers.push(answer)
       
       // display randomly
       
-      console.log(answers)
+      // console.log(answers)
           
       // attaches answers text to buttons and displays them randomly (?)
       renderButtons(answers)
@@ -172,9 +177,10 @@ https: $(document).ready(function() {
         if (timeleft <= 0) {
           clearInterval(answerTimer)
           nextQuestion()
-          startTimer()
-          console.log("Time's Up!")
-          wrong++ // adds 1 to the wrong counter, for no 
+          // startTimer()
+          // console.log("Time's Up!")
+          wrong++ // adds 1 to the wrong counter, for no
+          score++ 
           $('.wrong').text('Incorrect: ' + wrong)
          
         }
@@ -182,7 +188,13 @@ https: $(document).ready(function() {
       
     }
 
-    
+    function stopGame() {
+      if (score === 10) {
+        console.log("Stop Game!")
+      }
+      
+    }
+    stopGame()
   }
 
   /////////////////////////////////////////////////////////////////
