@@ -102,8 +102,9 @@ https: $(document).ready(function() {
       const buttonPush = $(this).attr('data-name')
   
       if (buttonPush === answer) {
+      
         correct++
-        score++
+        
         $('.correct').text('Correct: ' + correct)
         // console.log(correct)
         $('.corAns').text("That's right! The correct answer is " + answer)
@@ -116,13 +117,19 @@ https: $(document).ready(function() {
       } else {
         $('.wroAns').text('That is the wrong answer, try again')
         wrong++
-        score++
+        
         $('.wrong').text('Incorrect: ' + wrong)
         
         nextQuestion()
         
       
         $('.corAns').empty()
+        if (correct + wrong === 10) {
+          
+          $(".wroAns").text(`Game Over! You got ${correct} questions right, and ${wrong} questions wrong!`)
+          $('.corAns').empty()
+            
+        }
       }
     }
 
@@ -163,8 +170,10 @@ https: $(document).ready(function() {
 
   }
 
-  
-console.log(score)
+  function reStartGame () {
+
+  }
+
   function renderButtons(answers) {
     //     // YOUR CODE GOES HERE
 
@@ -195,7 +204,7 @@ console.log(score)
 
     
 
-    console.log(score)
+   
   }
 
   /////////////////////////////////////////////////////////////////
