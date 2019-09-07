@@ -128,8 +128,10 @@ https: $(document).ready(function() {
           
           $(".wroAns").text(`Game Over! You got ${correct} questions right, and ${wrong} questions wrong!`)
           $('.corAns').empty()
-            
+          // need to stop timer, and render results to page
+          // also add play again button (?)
         }
+        // clearInterval()
       }
     }
 
