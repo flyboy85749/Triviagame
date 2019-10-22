@@ -3,10 +3,11 @@ body {
     font-size: 1em;
     text-align: center;
     margin: 0 auto;
-    background-image: url("../images/balloon.jpg");
+    background-color: darkslategray;
+    /* background-image: url("https://previews.123rf.com/images/gustavofrazao/gustavofrazao1610/gustavofrazao161000922/64369428-trivia-written-on-a-wooden-cube-background.jpg"); */
     background-repeat: no-repeat;
     background-position: center;
-    
+    color: #FFF;
 }
 
 .jumbotron, .card {
@@ -17,10 +18,11 @@ body {
 .answer {
     display: block;
     margin: 10px;
+    background: #73FF9A;
     
 }
 .wroAns {
-    color: red;
+    color: #FFF;
 }
 
 .card-body {
@@ -33,16 +35,21 @@ body {
 .col-9 {
 }
 .display-3 {
+    color: #FF7373;
+    padding: 0px;
+    margin: 0px;
 }
 .col-3 {
 }
 .time-remaining {
+    
 }
 .correct {
 }
 .wrong {
 }
 .rules-text {
+    color: #FF8C8C;
 }
 .col {
 }
@@ -55,14 +62,19 @@ body {
 .card-body {
 }
 .card-title {
+    padding-top: -50px;
 }
 .question {
+    color: #FFF;
 }
 .card-text {
+    color: #2DB353;
 }
 .question-text {
+    color: #FF7373;
 }
 .answer-text {
+    color: black;
 }
 .lead {
 }

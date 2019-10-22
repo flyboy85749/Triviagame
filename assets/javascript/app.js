@@ -29,7 +29,7 @@ https: $(document).ready(function () {
   var timeleft = 25
   // console.log(score)
   var queryURL =
-    'https://opentdb.com/api.php?amount=10&category=18&difficulty=medium&type=multiple'
+    'https://opentdb.com/api.php?amount=10&category=18&difficulty=hard&type=multiple'
 
   /////////////////////////////////////////////////////////////////
   //////// *************** FUNCTIONS ******************///////////
@@ -138,7 +138,7 @@ https: $(document).ready(function () {
       nextQuestion()
 
 
-      // $('.corAns').empty()
+      $('.corAns').empty()
       // if (correct + wrong === 10) {
       //   clearInterval(answerTimer)
 
